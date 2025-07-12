@@ -1,0 +1,42 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Build
+build/
+dist/
+
+# Ignore all real configs, but NOT example configs
+configs/*.json
+!configs/*.example.json
+
+# Docker
+*.pid
+*.sock
+
+# Misc
+*.bak
+*.tmp 

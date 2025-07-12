@@ -1,0 +1,12 @@
+{
+  "v1": {
+    "baseUrl": "https://api.openai.com/v1",
+    "apiKey": "sk-...",
+    "description": "OpenAI API v1 configuration"
+  },
+  "v5": {
+    "baseUrl": "https://generativelanguage.googleapis.com/v1beta/openai",
+    "apiKey": "AIza...",
+    "description": "Google Gemini OpenAI-compatible API v5 configuration"
+  }
+} 

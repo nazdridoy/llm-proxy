@@ -1,0 +1,7 @@
+{
+  "v1": {
+    "baseUrl": "https://your-azure-resource.openai.azure.com/openai/deployments/your-deployment",
+    "apiKey": "your-azure-api-key",
+    "description": "Azure OpenAI v1 configuration"
+  }
+} 
