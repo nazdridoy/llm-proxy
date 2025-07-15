@@ -166,7 +166,31 @@ Response:
   "status": "healthy",
   "timestamp": "2024-01-15T10:30:00.000Z",
   "uptime": 123.456,
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "session": {
+    "id": "b8fae66f",
+    "startTime": "2024-01-15T10:30:00.000Z",
+    "duration": 123456
+  }
+}
+```
+
+### Session Information
+
+```bash
+curl http://localhost:3000/session
+```
+
+Response:
+```json
+{
+  "session": {
+    "sessionId": "b8fae66f",
+    "sessionStartTime": "2024-01-15T10:30:00.000Z",
+    "sessionDuration": 123456,
+    "logFilePath": "/path/to/logs/20250115103000_b8fae66f.log"
+  },
+  "timestamp": "2024-01-15T10:30:00.000Z"
 }
 ```
 
@@ -195,23 +219,32 @@ Response:
 
 ## Logging
 
-Logs are automatically created in the `logs/` directory with the format:
+Logs are automatically created in the `logs/` directory with session-based logging. Each server session creates a single log file with the format:
 ```
-YYYY-MM-DD-<profile>-<version>-log.log
+YYYYMMDDHHMMSS_<sessionID>.log
 ```
 
-Example: `2024-01-15-openai-v5-log.log`
+Example: `20250704062359_b8fae66f.log`
+
+### Session-Based Logging
+
+- **Single File Per Session**: All API interactions within a server session are logged to one file
+- **Persistent Session ID**: Each server instance gets a unique session ID that persists from start to shutdown
+- **Comprehensive Coverage**: All requests, responses, errors, and session events are logged together
+- **Easy Analysis**: Review all interactions for a specific server run in one place
 
 ### Log Format
 
 Each log entry contains:
 - Timestamp
+- Session ID and session start time
 - Request details (method, URL, headers, body)
 - Target URL
 - Response details (status, headers, body)
 - Duration
 - Request ID
 - Profile and version information
+- Session events (start, shutdown, errors)
 
 ### Log Sanitization
 
@@ -282,8 +315,8 @@ This uses nodemon for automatic restarts on file changes.
 | `PORT` | 3000 | Server port |
 | `NODE_ENV` | development | Environment mode |
 | `LOG_LEVEL` | info | Logging level |
-| `LOG_MAX_SIZE` | 10m | Max log file size |
-| `LOG_MAX_FILES` | 5 | Max log files to keep |
+| `LOG_MAX_SIZE` | 50m | Max log file size |
+| `LOG_MAX_FILES` | 10 | Max log files to keep |
 | `CORS_ORIGIN` | * | CORS origin |
 | `BODY_LIMIT` | 50mb | Request body size limit |
 
@@ -296,8 +329,14 @@ curl http://localhost:3000/health
 # Test configuration endpoint
 curl http://localhost:3000/config
 
+# Test session information
+curl http://localhost:3000/session
+
 # Test proxy with OpenAI
 curl http://localhost:3000/openai/v5/models
+
+# Test session logging
+npm run test:logging
 ```
 
 ## Production Deployment
@@ -351,11 +390,17 @@ Set `LOG_LEVEL=debug` for detailed logging.
 
 Logs are in JSON format for easy parsing:
 ```bash
-# View recent logs
-tail -f logs/$(date +%Y-%m-%d)-openai-v5-log.log
+# View current session logs
+tail -f logs/$(ls -t logs/*.log | head -1)
 
-# Search for errors
-grep "error" logs/*.log
+# Search for errors in current session
+grep "error" logs/$(ls -t logs/*.log | head -1)
+
+# List all session logs
+ls -la logs/*.log
+
+# View specific session log
+cat logs/20250704062359_b8fae66f.log
 ```
 
 ## Contributing

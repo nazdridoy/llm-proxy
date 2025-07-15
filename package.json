@@ -1,12 +1,13 @@
 {
   "name": "llm-proxy",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A transparent REST API proxy for LLM APIs with profile-based configuration",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "test": "node test/test-proxy.js"
+    "test": "node test/test-proxy.js",
+    "test:logging": "node test/test-session-logging.js"
   },
   "keywords": ["proxy", "llm", "api", "openai", "azure"],
   "author": "",
